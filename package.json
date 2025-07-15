@@ -1,0 +1,23 @@
+{
+  "name": "devjobs",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file .env  --watch src/index.js"
+  },
+  "keywords": [
+    "Portal DevJobs",
+    "Mongoose",
+    "Handlebars",
+    "NodeJS",
+    "MVC"
+  ],
+  "author": "Miguel Ortiz",
+  "license": "ISC",
+  "description": "Portal DevJobs con Node para desarrolladores",
+  "devDependencies": {
+    "express": "^5.1.0",
+    "express-handlebars": "^8.0.3"
+  }
+}
