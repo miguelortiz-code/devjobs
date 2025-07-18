@@ -1,7 +1,10 @@
+import mongoose from 'mongoose';
+import MongoStore from 'connect-mongo';
+import './config/database.js';
 import express from 'express';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
 import {engine} from 'express-handlebars';
-import path from 'path'
-import {fileURLToPath} from 'url'
 import {authRoutes} from './routes/index.routes.js'
 const app = express();
 
@@ -11,9 +14,22 @@ app.set('view engine', 'handlebars');
 app.set('views', 'src/views');
 
 // Archivos estaticos
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('src/public'));
+
+// Habilitando cookie
+app.use(cookieParser());
+
+// Habilitando Session
+app.use(session({
+    secret: process.env.SECRET,
+    key : process.env.KEY,
+    resave: false,
+    saveUninitialized:false,
+    store: MongoStore.create({
+        mongoUrl: process.env.DB,
+        ttl: 60 * 60 // tiempo de expiración en segundos (opcional)
+     })
+}));
 
 // Routing
 app.use('/', authRoutes);
