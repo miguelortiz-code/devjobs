@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import {Vacancy} from '../models/index.model.js';
 
 // Conexión a la base de datos
 mongoose.connect(process.env.DB);
@@ -14,6 +15,6 @@ mongoose.connection.once('open', () =>{
 });
 
 // Evento cuando se desconecta
-mongoose.connection.on('disconected', () =>{
+mongoose.connection.on('disconnected', () =>{
     console.warn(`⚠️ Conexión a ${process.env.DB}  cerrada`);
 });
