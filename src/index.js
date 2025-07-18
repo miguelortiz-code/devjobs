@@ -4,12 +4,16 @@ import './config/database.js';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
-import {engine} from 'express-handlebars';
+import {engine, create} from 'express-handlebars';
 import {authRoutes} from './routes/index.routes.js'
+import { selectSkills } from './helpers/handlebars.helper.js';
 const app = express();
 
 // Habilitar Handlebars como view
-app.engine('handlebars', engine());
+const hbs = create({
+    helpers: {selectSkills}
+});
+app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', 'src/views');
 
