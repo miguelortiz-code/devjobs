@@ -9,6 +9,10 @@ import {authRoutes} from './routes/index.routes.js'
 import { selectSkills } from './helpers/handlebars.helper.js';
 const app = express();
 
+
+// Habilitar lectura de datos en formularios
+app.use(express.urlencoded({extended: true}));
+
 // Habilitar Handlebars como view
 const hbs = create({
     helpers: {selectSkills}
