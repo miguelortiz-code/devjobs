@@ -1,4 +1,5 @@
 import {Vacancy} from '../models/index.model.js';
+import {typeContract} from '../helpers/handlebars.helper.js'
 
 const displayJobs =  async (req, res, next) =>{
     // Consultar las vacantes
@@ -43,7 +44,7 @@ const addVacancy = async (req, res) =>{
     res.redirect(`/vacancy/${newVacancy.url}`);
 };
 
-// función para agregar nueva vacante
+// función para mostrar nueva vacante
 const showVacancy =  async (req, res, next) =>{
     // Extraer la url de la vacante de  la url
     const {url} = req.params;
@@ -60,10 +61,45 @@ const showVacancy =  async (req, res, next) =>{
 
 }
 
+// Función para mostrar la vista del formulario de edición de la vacante
+const formEditVacancy = async (req, res, next) =>{
+    // Extraer la url de la vacante desde la url
+    const {url} = req.params;
+    // Consultar vacante desde la base de datos
+    const vacancy = await Vacancy.findOne({url: url});
+
+    // Si no existe Vacante 
+    if(!vacancy) return next();
+
+    // Validar que los skills sean un array
+    let selectedSkills = [];
+    if( typeof vacancy.skills === 'string'){
+        selectedSkills = vacancy.skills.split(',').map(skill => skill.trim());
+    }else if(Array.isArray(vacancy.skills)){
+        selectedSkills = vacancy.skills;
+    }
+
+
+    // Si Existe la vacante renderizar el formulario
+    res.render('vacancies/edit-vacancy', {
+        namePage: `Editar - ${vacancy.title}`,
+        vacancy,
+        typeContract,
+        skills: selectedSkills
+    })
+}
+
+// Función para editar vacantes
+const editVacancy = async(req, res) =>{
+    console.log('Editando vacante');
+}
+
 
 export{
     displayJobs,
     formVacancie,
     addVacancy,
-    showVacancy
+    showVacancy,
+    formEditVacancy,
+    editVacancy
 }
