@@ -4,7 +4,9 @@ import './config/database.js';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
-import {engine, create} from 'express-handlebars';
+import {engine} from 'express-handlebars';
+import {allowInsecurePrototypeAccess} from '@handlebars/allow-prototype-access';
+import handlebars from 'handlebars';
 import {authRoutes} from './routes/index.routes.js'
 import { selectSkills } from './helpers/handlebars.helper.js';
 const app = express();
@@ -14,10 +16,17 @@ const app = express();
 app.use(express.urlencoded({extended: true}));
 
 // Habilitar Handlebars como view
-const hbs = create({
-    helpers: {selectSkills}
-});
-app.engine('handlebars', hbs.engine);
+// Habilitar Handlebars como view
+app.engine(
+  'handlebars',
+  engine({
+    handlebars: allowInsecurePrototypeAccess(handlebars),
+    helpers: {
+      selectSkills
+    }
+  })
+);
+
 app.set('view engine', 'handlebars');
 app.set('views', 'src/views');
 

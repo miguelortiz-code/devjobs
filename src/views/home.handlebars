@@ -1,20 +1,26 @@
 <section class="lista-vacantes">
-    <h2>Lista de Vacantes</h2>
-    <div class="vacante">
+  <h2>Lista de Vacantes</h2>
+  {{#if vacancies.length}}
+    {{#each vacancies}}
+      <div class="vacante">
         <div class="caja">
-            <h3>Facebook</h3>
-            <p class="puesto">React Developer</p>
+          <h3>{{company}}</h3>
+          <p class="puesto">{{title}}</p>
         </div>
         <div class="caja">
-            <p class="etiqueta">Úbicación</p>
-            <p class="nombre">Remoto</p>
+          <p class="etiqueta">Úbicación</p>
+          <p class="nombre">{{ubication}}</p>
         </div>
         <div class="caja">
-            <p class="etiqueta">Contrato</p>
-            <p class="nombre contrato">Tiempo Completo</p>
+          <p class="etiqueta">Contrato</p>
+          <p class="nombre contrato">{{contract}}</p>
         </div>
         <div class="caja centrar-vertical">
-            <a href="#" class="btn btn-verde">más info</a>
+          <a href='/vacancy/{{url}}' class="btn btn-verde">más info</a>
         </div>
-    </div>
+      </div>
+    {{/each}}
+  {{else}}
+    <p>No hay vacantes disponibles en este momento.</p>
+  {{/if}}
 </section>
