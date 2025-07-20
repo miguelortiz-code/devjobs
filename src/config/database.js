@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {Vacancy} from '../models/index.model.js';
+import {Vacancy, Users} from '../models/index.model.js';
 
 // Conexión a la base de datos
 mongoose.connect(process.env.DB);
