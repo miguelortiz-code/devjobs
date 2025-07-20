@@ -90,8 +90,36 @@ const formEditVacancy = async (req, res, next) =>{
 }
 
 // Función para editar vacantes
-const editVacancy = async(req, res) =>{
-    console.log('Editando vacante');
+const editVacancy = async(req, res, next) =>{
+    try{
+        // Extraer la url de la vacante desde la url
+        const {url } = req.params;
+
+        // Extraer datos del formulario
+        const {title, company, ubication, salary, contract, description, skills} = req.body
+
+        // Actualizar Vacante
+        const vacancy = await Vacancy.findOneAndUpdate({url: url}, {
+            title,
+            company,
+            ubication,
+            salary,
+            contract,
+            description,
+            skills: skills.split(',')
+        }, {
+            new: true,
+            runValidators: true,
+        });
+        // Si no existe la vacante a editar
+        if(!vacancy) return next();
+
+        // Redireccionamos a la vacante actualizada
+        res.redirect(`/vacancy/${vacancy.url}`);
+    }catch(error){
+        console.log("Error al editar la vacante: ", error);
+        return next()
+    }
 }
 
 
