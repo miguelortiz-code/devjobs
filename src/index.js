@@ -7,7 +7,7 @@ import session from 'express-session';
 import {engine} from 'express-handlebars';
 import {allowInsecurePrototypeAccess} from '@handlebars/allow-prototype-access';
 import handlebars from 'handlebars';
-import {authRoutes} from './routes/index.routes.js'
+import {homeRoutes, authRoutes} from './routes/index.routes.js'
 import { selectSkills } from './helpers/handlebars.helper.js';
 const app = express();
 
@@ -49,7 +49,12 @@ app.use(session({
 }));
 
 // Routing
-app.use('/', authRoutes);
+app.use('/', homeRoutes); // Página principal
+app.use('/auth', authRoutes) // Autenticación
+
+
+
+
 // Arrancando servidor
 app.listen(process.env.PORT, () =>{
     console.log(`Servidor corriendo en el ${process.env.BACKEND_URL}${process.env.PORT}`);
