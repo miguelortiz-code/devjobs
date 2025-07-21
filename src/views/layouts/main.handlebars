@@ -42,6 +42,12 @@
         </section>
 
         <section class="contenido-principal contenedor">
+            {{#if message}}
+                <div class="alertas">
+                    {{#showAlerts message}}
+                    {{/showAlerts}}
+                </div>
+            {{/if}}
             {{{body}}}
          </section>
     </main>

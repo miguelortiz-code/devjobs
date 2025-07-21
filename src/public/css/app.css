@@ -454,18 +454,21 @@ p.candidatos {
 .alertas {
     text-align: center;
     position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 65px;
+    right: 1.25rem;
+    top: 1rem;
+    display: grid;
+    place-items: flex-end;
 }
 .alerta {
-    padding: 1rem 3rem; 
+    padding: 1rem 3rem;
+    border-radius: .90rem; 
     color: white;
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     text-align: center;
     text-transform: uppercase;
     font-weight: 700;
-    margin-top: .3rem;
+    margin-top: .7rem;
+    width: auto;
 }
 .correcto {
     background-color: #00C897;

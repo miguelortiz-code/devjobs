@@ -1,14 +1,15 @@
-import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 import './config/database.js';
 import express from 'express';
+import flash from 'connect-flash';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import {engine} from 'express-handlebars';
 import {allowInsecurePrototypeAccess} from '@handlebars/allow-prototype-access';
 import handlebars from 'handlebars';
 import {homeRoutes, authRoutes} from './routes/index.routes.js'
-import { selectSkills } from './helpers/handlebars.helper.js';
+import { selectSkills, showAlerts } from './helpers/handlebars.helper.js';
+import { message } from './middleware/message.middleware.js';
 const app = express();
 
 
@@ -22,7 +23,8 @@ app.engine(
   engine({
     handlebars: allowInsecurePrototypeAccess(handlebars),
     helpers: {
-      selectSkills
+      selectSkills,
+      showAlerts
     }
   })
 );
@@ -47,6 +49,10 @@ app.use(session({
         ttl: 60 * 60 // tiempo de expiración en segundos (opcional)
      })
 }));
+
+// Alertas y flash message
+app.use(flash());
+app.use (message);
 
 // Routing
 app.use('/', homeRoutes); // Página principal

@@ -26,7 +26,24 @@ const typeContract = function (selected, options) {
     return new Handlebars.SafeString(finalHtml);
 };
 
+const showAlerts = (alerts = {}) => {
+    let html = '';
+
+    // Recorrer cada tipo de alerta: error, success, etc.
+    Object.keys(alerts).forEach(category => {
+        alerts[category].forEach(msg => {
+            html += `
+                <div class="${category} alerta">
+                    ${msg}
+                </div>
+            `;
+        });
+    });
+    return new Handlebars.SafeString(html);
+};
+
 export{
     selectSkills,
-    typeContract
+    typeContract,
+    showAlerts
 }
