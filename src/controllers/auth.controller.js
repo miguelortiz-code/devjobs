@@ -1,6 +1,6 @@
 import { check, validationResult } from 'express-validator';
+import passport from 'passport';
 import Users from '../models/users.model.js';
-import { message } from '../middleware/message.middleware.js';
 
 // Vista para mostrar el formulario de registro
 const formRegister = (req, res) =>{
@@ -9,7 +9,7 @@ const formRegister = (req, res) =>{
         tagline: 'Comienza a publicar tus vacantes gratis, solo debes crear una cuenta'
     });
 }
-
+// Función para registrar al usuario
 const register = async (req, res) =>{
     // Extraer los datos del formulario
     const {name, email, password} = req.body;
@@ -49,7 +49,24 @@ const register = async (req, res) =>{
     }
 }
 
+const formLogin = (req, res) =>{
+    res.render('auth/login', {
+        namePage: 'Iniciar Sesión devJobs'
+    })
+}
+
+const login = (req, res, next) => {
+    passport.authenticate('local', {
+        successRedirect: '/admin',
+        failureRedirect: '/auth/login',
+        failureFlash: true,
+        badRequestMessage: 'Los campos son obligatorios'
+    })(req, res, next);
+};
+
 export{
     formRegister,
-    register
+    register,
+    formLogin,
+    login
 }

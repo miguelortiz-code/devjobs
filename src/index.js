@@ -10,6 +10,7 @@ import handlebars from 'handlebars';
 import {homeRoutes, authRoutes} from './routes/index.routes.js'
 import { selectSkills, showAlerts } from './helpers/handlebars.helper.js';
 import { message } from './middleware/message.middleware.js';
+import passport from './config/passport.js';
 const app = express();
 
 
@@ -49,6 +50,10 @@ app.use(session({
         ttl: 60 * 60 // tiempo de expiración en segundos (opcional)
      })
 }));
+
+// Iniciarlizar Passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Alertas y flash message
 app.use(flash());
