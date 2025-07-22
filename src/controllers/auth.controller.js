@@ -38,26 +38,15 @@ const register = async (req, res) =>{
 
         });
     }
-    return;
 
-    // Almacenar el usuario
-    const user  = await Users.create({
-        name,
-        email,
-        password
-    });
-
-    const newUser = await user.save();
-
-    // Si no se crea el usuario
-    if(!newUser){
-        return next();
+   const user = new Users({ name, email, password });
+    try {
+        await user.save();
+        res.redirect('/auth/login');
+    } catch (error) {
+        req.flash('error', error.message || 'Hubo un error al registrar el usuario');
+        res.redirect('/auth/register');
     }
-
-    // Redireccionar la usuario
-    res.redirect('/login');
-
-
 }
 
 export{
