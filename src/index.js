@@ -7,7 +7,7 @@ import session from 'express-session';
 import {engine} from 'express-handlebars';
 import {allowInsecurePrototypeAccess} from '@handlebars/allow-prototype-access';
 import handlebars from 'handlebars';
-import {homeRoutes, authRoutes, dashboardRoutes} from './routes/index.routes.js'
+import {homeRoutes, authRoutes, dashboardRoutes, profileRoutes} from './routes/index.routes.js'
 import { selectSkills, showAlerts } from './helpers/handlebars.helper.js';
 import { message } from './middleware/message.middleware.js';
 import passport from './config/passport.js';
@@ -63,6 +63,7 @@ app.use (message);
 app.use('/', homeRoutes); // Página principal
 app.use('/auth', authRoutes) // Autenticación
 app.use('/', dashboardRoutes) // Panel administrativo
+app.use('/account', profileRoutes) // Perfil del usuario
 
 
 
