@@ -329,6 +329,10 @@ trix-toolbar .trix-button--icon-strike {
     display: block;
     margin-bottom: 2rem;
 }
+
+.default-form input[type="text"]{
+    text-transform: capitalize;
+}
 .default-form input[type="submit"] {
     margin-top: 2rem;
 }
