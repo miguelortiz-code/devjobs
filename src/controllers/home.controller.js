@@ -27,7 +27,7 @@ const formVacancie = (req, res) =>{
 const addVacancy = async (req, res) =>{
     // Extraer datos del formulario
     const {title, company, ubication, salary, contract, description, skills} = req.body
-
+    const {_id} = req.user;
     const vacancy = new Vacancy({
         title,
         company,
@@ -35,7 +35,8 @@ const addVacancy = async (req, res) =>{
         salary,
         contract,
         description,
-        skills: skills.split(',') // Crear arreglo de Habilidades (Skills)
+        skills: skills.split(','), // Crear arreglo de Habilidades (Skills)
+        autor: _id
     });
     // Almacenar en la base de datos
     const newVacancy = await vacancy.save();

@@ -44,6 +44,11 @@ const vacancySchema = new mongoose.Schema({
       cv: String,
     },
   ],
+  autor: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Users',
+    required: 'El autor es obligatorio'
+  }
 }, { timestamps: true });
 
 // Generar slug antes de guardar
