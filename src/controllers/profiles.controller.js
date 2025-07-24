@@ -21,6 +21,46 @@ const viewProfile = async (req, res ) =>{
     }
 }
 
+const profile = async (req, res) =>{
+    try {
+        // Extraer campos del formulario
+        const {name, email, password, confirm_password} = req.body;
+        // Consultar al usuario
+        const{_id} = req.user;
+        const user  = await Users.findById(_id);
+
+        if(!user){
+            return res.redirect('/auth/login');
+        }
+        // Actualizar campos
+        user.name = name;
+        user.email = email
+        
+          // Verificar si el usuario quiere actualizar la contraseña
+        if (password && password.trim() !== '') {
+            if (password !== confirm_password) {
+                req.flash('error', 'Las contraseñas no coinciden');
+                return res.redirect('/account/profile');
+            }
+
+            user.password = password;
+        }
+        // Actualizar perfil
+        await user.save();
+
+        req.flash('correcto' , 'Perfil actualizado correctamente');
+
+        // Redireccionar al usuario
+        res.redirect('/admin');
+
+    } catch (error) {
+        console.log(`Error al guardar los cambios: ${error}`);
+        res.redirect('/auth/login');
+    }
+    
+};
+
 export{
-    viewProfile
+    viewProfile,
+    profile
 }
