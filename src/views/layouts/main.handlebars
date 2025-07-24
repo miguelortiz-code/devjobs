@@ -26,6 +26,13 @@
                 </form>
             </div>
         {{/if}}
+        {{#if logout}}
+            <div class="cerrar-sesion">
+                <p>Hola! {{{name}}}</p>
+                <a href="/admin">Administrar vacantes</a>
+                <a href="/logout">Cerrar Sesión</a>
+            </div>
+        {{/if}}
     </header>
 
     <main>

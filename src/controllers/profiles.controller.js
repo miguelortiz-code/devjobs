@@ -3,7 +3,7 @@ import {Users} from '../models/index.model.js';
 const viewProfile = async (req, res ) =>{
     try {
         // Extraer el id del usuario que inicio sesión
-        const {_id} = req.user;
+        const {_id, name} = req.user;
         // Consultar en la base de datos el usuario
         const user = await Users.findById(_id);
         // Si no hay usuario autenticado
@@ -13,7 +13,9 @@ const viewProfile = async (req, res ) =>{
 
         res.render('auth/profile',{
             namePage: 'Edita tu perfil en devJobs',
-            user
+            user,
+            logout: true,
+            name
         });   
     } catch (error) {
         console.log(`Error al obtener la información del usuario: ${error}`);

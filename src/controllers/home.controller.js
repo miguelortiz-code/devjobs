@@ -17,9 +17,12 @@ const displayJobs =  async (req, res, next) =>{
 }
 // Vista para mostrar el formulario de una nueva vacante
 const formVacancie = (req, res) =>{
+    const {name} = req.user;
     res.render('new-vacancy', {
         namePage: 'Crear Vacante',
-        tagline:  'Llena el formulario y publica la vacante'
+        tagline:  'Llena el formulario y publica la vacante',
+        logout: true,
+        name
     });
 };
 
@@ -66,6 +69,7 @@ const showVacancy =  async (req, res, next) =>{
 const formEditVacancy = async (req, res, next) =>{
     // Extraer la url de la vacante desde la url
     const {url} = req.params;
+    const {name} = req.user;
     // Consultar vacante desde la base de datos
     const vacancy = await Vacancy.findOne({url: url});
 
@@ -86,7 +90,9 @@ const formEditVacancy = async (req, res, next) =>{
         namePage: `Editar - ${vacancy.title}`,
         vacancy,
         typeContract,
-        skills: selectedSkills
+        skills: selectedSkills,
+        logout: true,
+        name
     })
 }
 
