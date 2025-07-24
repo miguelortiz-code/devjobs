@@ -14,15 +14,16 @@ const register = async (req, res) =>{
     // Extraer los datos del formulario
     const {name, email, password} = req.body;
     // Validar y sanitizar los campos
-    await check('name').trim().escape().notEmpty().withMessage('El nombre es obligatorio').run(req);
-    await check('email').trim().normalizeEmail().notEmpty().withMessage('El correo es obligatario').isEmail().withMessage('El formato del correo es obligatrio').run(req);
-    await check('password').trim().escape().notEmpty().withMessage('La contraseña es obligatoria').isLength({min:6}).withMessage('La contraseña debe tener minimo 6 caracteres').run(req);
-    await check('confirm_password').trim().escape().custom((val, {req})=>{
-        if(val !== req.body.password){
-            throw new Error('Las contraseñas no coninciden');
+    await check('name').notEmpty().withMessage('El nombre es obligatorio').trim().escape().toLowerCase().run(req);
+    await check('email').notEmpty().withMessage('El correo es obligatorio').isEmail().withMessage('El formato del correo es inválido').normalizeEmail().run(req);
+    await check('password').notEmpty().withMessage('La contraseña es obligatoria').isLength({ min: 6 }).withMessage('La contraseña debe tener mínimo 6 caracteres').trim().run(req);
+    await check('confirm_password').notEmpty().withMessage('La confirmación de la contraseña es obligatoria')
+    .custom((val, { req }) => {
+        if (val !== req.body.password) {
+        throw new Error('Las contraseñas no coinciden');
         }
         return true;
-    }).run(req);
+    }).trim().run(req);
 
     let result = validationResult(req);
     

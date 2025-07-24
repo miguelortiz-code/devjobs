@@ -1,3 +1,4 @@
+import { check, validationResult} from 'express-validator';
 import {Vacancy} from '../models/index.model.js';
 import {typeContract} from '../helpers/handlebars.helper.js'
 
@@ -30,7 +31,30 @@ const formVacancie = (req, res) =>{
 const addVacancy = async (req, res) =>{
     // Extraer datos del formulario
     const {title, company, ubication, salary, contract, description, skills} = req.body
-    const {_id} = req.user;
+    const {_id, name} = req.user;
+    // Validar y sanitizar campos
+    await check('title').notEmpty().withMessage('El nombre la vacante es obligatorio').trim().escape().toLowerCase().run(req);
+    await check('company').notEmpty().withMessage('La empresa es obligatoria').trim().escape().toLowerCase().run(req);
+    await check('ubication').notEmpty().withMessage('La ubicación es obligatoria').trim().escape().toLowerCase().run(req);
+    await check('salary').notEmpty().withMessage('El salario debe ser mayor a 0').trim().escape().isNumeric().run(req);
+    await check('contract').notEmpty().withMessage('Debes seleccionar un tipo de contrato').trim().escape().toLowerCase().run(req);
+    await check('description').notEmpty().withMessage('La descripción es obligatoria').isLength({ min: 20 }).withMessage('La descripción debe tener un mínimo de 20 caracteres').trim().escape().toLowerCase().run(req);
+    await check('skills').notEmpty().withMessage('Debes seleccionar al menos una habilidad').trim().escape().toLowerCase().run(req);
+    // Mostrar errores
+    const result = validationResult(req);
+    // Validar si el resultado está vacio
+    if(!result.isEmpty()){
+        // Errors
+        req.flash('error', result.array().map(res => res.msg));
+        return res.render('new-vacancy', {
+            namePage: 'Crear Vacante',
+            tagline:  'Llena el formulario y publica la vacante',
+            logout: true,
+            name,
+            message: req.flash()
+        });
+    };
+
     const vacancy = new Vacancy({
         title,
         company,
@@ -92,42 +116,62 @@ const formEditVacancy = async (req, res, next) =>{
         typeContract,
         skills: selectedSkills,
         logout: true,
-        name
+        name,
+        message: req.flash()
     })
 }
 
 // Función para editar vacantes
-const editVacancy = async(req, res, next) =>{
-    try{
-        // Extraer la url de la vacante desde la url
-        const {url } = req.params;
+const editVacancy = async (req, res, next) => {
+  try {
+    const { url } = req.params;
+    const { name } = req.user;
+    const { title, company, ubication, salary, contract, description, skills } = req.body;
 
-        // Extraer datos del formulario
-        const {title, company, ubication, salary, contract, description, skills} = req.body
+    // Buscar vacante antes para usarla en la vista si hay errores
+    const vacancy = await Vacancy.findOne({url: url});
+    if (!vacancy) return next();
 
-        // Actualizar Vacante
-        const vacancy = await Vacancy.findOneAndUpdate({url: url}, {
-            title,
-            company,
-            ubication,
-            salary,
-            contract,
-            description,
-            skills: skills.split(',')
-        }, {
-            new: true,
-            runValidators: true,
-        });
-        // Si no existe la vacante a editar
-        if(!vacancy) return next();
+    // Validar campos
+    await check('title').notEmpty().withMessage('El nombre la vacante es obligatorio').trim().escape().run(req);
+    await check('company').notEmpty().withMessage('La empresa es obligatoria').trim().escape().run(req);
+    await check('ubication').notEmpty().withMessage('La ubicación es obligatoria').trim().escape().run(req);
+    await check('salary').notEmpty().withMessage('El salario debe ser mayor a 0').isNumeric().withMessage('El salario debe ser un número').trim().run(req);
+    await check('contract').notEmpty().withMessage('Debes seleccionar un tipo de contrato').trim().escape().run(req);
+    await check('description').notEmpty().withMessage('La descripción es obligatoria').isLength({ min: 20 }).withMessage('La descripción debe tener un mínimo de 20 caracteres').trim().escape().run(req);
+    await check('skills').notEmpty().withMessage('Debes seleccionar al menos una habilidad').trim().escape().run(req);
 
-        // Redireccionamos a la vacante actualizada
-        res.redirect(`/vacancy/${vacancy.url}`);
-    }catch(error){
-        console.log("Error al editar la vacante: ", error);
-        return next()
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      req.flash('error', result.array().map(res => res.msg));
+      const selectedSkills = typeof skills === 'string' ? skills.split(',') : vacancy.skills;
+      return res.render('vacancies/edit-vacancy', {
+        namePage: `Editar - ${vacancy.title}`,
+        vacancy,
+        typeContract,
+        skills: selectedSkills,
+        logout: true,
+        name,
+        message: req.flash()
+      });
     }
-}
+
+    // Actualizar Vacante
+    vacancy.title = title;
+    vacancy.company = company;
+    vacancy.ubication = ubication;
+    vacancy.salary = salary;
+    vacancy.contract = contract;
+    vacancy.description = description;
+    vacancy.skills = skills.split(',');
+    await vacancy.save();
+    req.flash('correcto', 'Vacante actualizada correctamente');
+    res.redirect(`/vacancy/${vacancy.url}`);
+  } catch (error) {
+    console.log("Error al editar la vacante: ", error);
+    return next();
+  }
+};
 
 
 export{
