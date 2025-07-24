@@ -8,6 +8,12 @@ const isAuthenticated = (req, res, next) =>{
     res.redirect('/auth/login');
 }
 
+const noCache = (req, res, next) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    next();
+};
+
 export {
-    isAuthenticated
+    isAuthenticated,
+    noCache
 }

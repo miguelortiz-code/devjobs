@@ -63,10 +63,20 @@ const login = (req, res, next) => {
         badRequestMessage: 'Los campos son obligatorios'
     })(req, res, next);
 };
+const logout = (req, res, next) =>{
+    req.logout(function(err){
+        if(err){
+            return next(err);
+        }
+        req.flash('correcto', 'Has cerrado sessión exitosamente');
+        return res.redirect('/auth/login');
+    });
+};
 
 export{
     formRegister,
     register,
     formLogin,
-    login
+    login,
+    logout
 }
