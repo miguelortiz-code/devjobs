@@ -173,6 +173,30 @@ const editVacancy = async (req, res, next) => {
   }
 };
 
+const deleteVacancy = async (req, res) => {
+  const { id } = req.params;
+  const { _id } = req.user;
+
+  try {
+    const vacancy = await Vacancy.findById(id);
+
+    if (!vacancy) {
+      return res.status(404).send('Vacante no encontrada');
+    }
+
+    if (vacancy.autor.toString() !== _id.toString()) {
+      return res.status(403).send('No tienes permiso para eliminar esta vacante');
+    }
+
+    await Vacancy.findByIdAndDelete(id);
+
+    return res.status(200).send('Vacante eliminada correctamente');
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send('Hubo un error al eliminar la vacante');
+  }
+};
+
 
 export{
     displayJobs,
@@ -180,5 +204,6 @@ export{
     addVacancy,
     showVacancy,
     formEditVacancy,
-    editVacancy
+    editVacancy,
+    deleteVacancy
 }
