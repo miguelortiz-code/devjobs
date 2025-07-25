@@ -1,3 +1,4 @@
+import {check, validationResult} from 'express-validator';
 import {Users} from '../models/index.model.js';
 
 const viewProfile = async (req, res ) =>{
@@ -23,43 +24,53 @@ const viewProfile = async (req, res ) =>{
     }
 }
 
-const profile = async (req, res) =>{
-    try {
-        // Extraer campos del formulario
-        const {name, email, password, confirm_password} = req.body;
-        // Consultar al usuario
-        const{_id} = req.user;
-        const user  = await Users.findById(_id);
+const profile = async (req, res) => {
+  try {
+    const { name, email, password, confirm_password } = req.body;
+    const { _id } = req.user;
 
-        if(!user){
-            return res.redirect('/auth/login');
-        }
-        // Actualizar campos
-        user.name = name;
-        user.email = email
-        
-          // Verificar si el usuario quiere actualizar la contraseña
-        if (password && password.trim() !== '') {
-            if (password !== confirm_password) {
-                req.flash('error', 'Las contraseñas no coinciden');
-                return res.redirect('/account/profile');
-            }
+    const user = await Users.findById(_id);
+    if (!user) return res.redirect('/auth/login');
 
-            user.password = password;
-        }
-        // Actualizar perfil
-        await user.save();
+    // Validar campos
+    await check('name').notEmpty().withMessage('El nombre es obligatorio').trim().escape().toLowerCase().run(req);
+    await check('email').notEmpty().withMessage('El correo es obligatorio').isEmail().withMessage('Debe ingresar un correo válido').normalizeEmail().run(req);
 
-        req.flash('correcto' , 'Perfil actualizado correctamente');
-
-        // Redireccionar al usuario
-        res.redirect('/admin');
-
-    } catch (error) {
-        console.log(`Error al guardar los cambios: ${error}`);
-        res.redirect('/auth/login');
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      req.flash('error', result.array().map(err => err.msg));
+      return res.render('auth/profile', {
+        namePage: 'Edita tu perfil en devJobs',
+        user,
+        logout: true,
+        name: req.user.name,
+        message: req.flash()
+      });
     }
-    
+
+    // Actualizar campos
+    user.name = name;
+    user.email = email;
+
+    // Actualizar contraseña si se proporcionó
+    if (password && password.trim() !== '') {
+      if (password !== confirm_password) {
+        req.flash('error', 'Las contraseñas no coinciden');
+        return res.redirect('/account/profile');
+      }
+
+      user.password = password;
+    }
+
+    await user.save();
+
+    req.flash('success', 'Perfil actualizado correctamente');
+    res.redirect('/admin');
+
+  } catch (error) {
+    console.error('Error al guardar los cambios:', error);
+    res.redirect('/auth/login');
+  }
 };
 
 export{
