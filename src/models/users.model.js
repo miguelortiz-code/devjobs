@@ -20,7 +20,8 @@ const usersSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true
-    }, 
+    },
+    image: String,
     token : String,
     expire: Date
 }, { timestamps: true });
