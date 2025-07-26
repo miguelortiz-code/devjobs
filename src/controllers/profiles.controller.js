@@ -61,10 +61,15 @@ const profile = async (req, res) => {
 
       user.password = password;
     }
+    
+    // Si existe imagen agregarlamon
+    if(req.file){
+      user.image = req.file.filename;
+    }
 
     await user.save();
 
-    req.flash('success', 'Perfil actualizado correctamente');
+    req.flash('correcto', 'Perfil actualizado correctamente');
     res.redirect('/admin');
 
   } catch (error) {

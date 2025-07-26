@@ -8,9 +8,23 @@ const storage = multer.diskStorage({
     },
     filename: function(req, file, cb){
         cb(null, shortid.generate() + path.extname(file.originalname));
-    }
+    },
 });
 
-const upload = multer({storage});
+const fileFilter = (req, file, cb) =>{
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
+    if(allowedTypes.includes(file.mimetype)){
+        // El callback se ejecuta como true o false: true cuando acepta el formato establecido
+        cb(null, true);
+    }else{
+        cb(null, false);
+    }
+}
+
+const upload = multer({
+    storage,
+    fileFilter,
+    limits: {fileSize: 100000}
+});
 
 export default upload;
