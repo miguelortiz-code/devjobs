@@ -78,7 +78,7 @@ const showVacancy =  async (req, res, next) =>{
     // Extraer la url de la vacante de  la url
     const {url} = req.params;
     // consultar la vacante des de la base de datos
-    const vacancy = await Vacancy.findOne({url: url});
+    const vacancy = await Vacancy.findOne({url: url}).populate('autor');
     // Si no existe vacante 
     if(!vacancy) return next();
     // Si existe al menos una vacante mostrar la vacante

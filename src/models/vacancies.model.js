@@ -46,7 +46,7 @@ const vacancySchema = new mongoose.Schema({
   ],
   autor: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Users',
+    ref: 'users',
     required: 'El autor es obligatorio'
   }
 }, { timestamps: true });
