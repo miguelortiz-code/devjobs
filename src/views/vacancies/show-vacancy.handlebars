@@ -36,7 +36,29 @@
 </section>
 
 <div class="contenedor datos-reclutador">
-    <div class="enviar-datos"></div>
+    <div class="enviar-datos">
+        <h2>Contactar Reclutador</h2>
+        <p>Llena el siguiente formulario, sube tu curriculum y pronto te contactaremos</p>
+        <form action="/vacancy/{{vacancy.url}}" class="default-form" method="POST" enctype="multipart/form-data">
+            <div class="campo">
+                <label for="name">Nombre</label>
+                <input type="text" name="name" id="name" placeholder="Jhon Doe">
+            </div>
+            
+            <div class="campo">
+                <label for="name">Correo Electrónico</label>
+                <input type="email" name="name" id="name" placeholder="jhondoe@gmail.com">
+            </div>
+            
+            <div class="campo">
+                <label for="cv">CV(PDF)</label>
+                <input type="file" name="cv" id="cv">
+            </div>
+            <div class="campo">
+                <input type="submit" value="Enviar Cv" class="btn btn-verde">
+            </div>
+        </form>
+    </div>
     <div class="info-reclutador">
         <h2>Información Reclutador</h2>
         {{#if vacancy.autor.name}}

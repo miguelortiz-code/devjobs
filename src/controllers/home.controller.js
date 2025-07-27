@@ -1,4 +1,6 @@
 import { check, validationResult} from 'express-validator';
+import multer from 'multer';
+import shortid from 'shortid';
 import {Vacancy} from '../models/index.model.js';
 import {typeContract} from '../helpers/handlebars.helper.js'
 
@@ -199,6 +201,9 @@ const deleteVacancy = async (req, res) => {
   }
 };
 
+const uploadResume =  async (req, res) =>{
+  
+};
 
 export{
     displayJobs,
@@ -207,5 +212,6 @@ export{
     showVacancy,
     formEditVacancy,
     editVacancy,
-    deleteVacancy
+    deleteVacancy,
+    uploadResume
 }
