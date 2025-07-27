@@ -17,7 +17,7 @@ const fileFilter = (req, file, cb) =>{
         // El callback se ejecuta como true o false: true cuando acepta el formato establecido
         cb(null, true);
     }else{
-        cb(null, false);
+        cb(new Error('El formato del archivo no es válido (solo .jpg, .png, .webp).'), false);
     }
 }
 
