@@ -14,7 +14,8 @@ const multerErrorHandler = (err, req, res, next) => {
   // Error personalizado (como tipo de archivo inválido)
   if (err) {
     req.flash('error', err.message || 'Error al subir el archivo.');
-    return res.redirect('/account/profile');
+    const {url} = req.params; // Extraer la url de la vacante
+    return res.redirect(`/vacancy/${url}`);
   }
 
   // Si no hay errores, continuar
