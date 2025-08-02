@@ -39,7 +39,7 @@ const vacancySchema = new mongoose.Schema({
   skills: [String],
   candidates: [
     {
-      nombre: String,
+      name: String,
       email: String,
       cv: String,
     },
