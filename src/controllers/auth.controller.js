@@ -74,10 +74,17 @@ const logout = (req, res, next) =>{
     });
 };
 
+const formRecoverPassword = (req, res) =>{
+    res.render('auth/recover-password', {
+        namePage: 'Recuperar Contraseña',
+        tagline: 'Si ya tienes una cuenta pero olvidaste tu password, coloca tu email'
+    });
+}
 export{
     formRegister,
     register,
     formLogin,
+    formRecoverPassword,
     login,
     logout
 }

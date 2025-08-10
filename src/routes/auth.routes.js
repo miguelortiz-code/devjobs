@@ -1,5 +1,5 @@
 import express from  'express';
-import {formRegister, register, formLogin, login, logout} from '../controllers/auth.controller.js';
+import {formRegister, register, formLogin, login, logout, formRecoverPassword} from '../controllers/auth.controller.js';
 import {isAuthenticated} from '../middleware/authenticated.middleware.js'
 const router = express.Router();
 
@@ -8,6 +8,7 @@ const router = express.Router();
 router.get('/register', formRegister);
 router.get('/login', formLogin);
 router.get('/logout', isAuthenticated, logout)
+router.get('/recover-password', formRecoverPassword);
 
 //Router POST
 router.post('/register', register);
