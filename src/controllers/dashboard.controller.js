@@ -16,6 +16,30 @@ const viewAdmin = async (req, res) =>{
     })
 }
 
+const viewCandidate = async (req, res) =>{
+    // Extraer el id del candidato desda la url
+    const {id} = req.params;
+    const {_id, name, image} = req.user;
+    // Consultar el candidatos desda la bd
+    const vacancy = await Vacancy.findById(id);
+
+    if(vacancy.autor != _id.toString()){
+        return next();
+    }
+
+    if(!vacancy){
+        return next();
+    }
+
+    res.render('admin/candidates', {
+        namePage: `Candidatos Vacante - ${vacancy.title}`,
+        logout: true,
+        name,
+        image,
+        candidates: vacancy.candidates
+    })
+}
 export{
-    viewAdmin
+    viewAdmin,
+    viewCandidate
 }
