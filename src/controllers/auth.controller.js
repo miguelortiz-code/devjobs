@@ -2,6 +2,7 @@ import { check, validationResult } from 'express-validator';
 import passport from 'passport';
 import crypto from 'crypto';
 import Users from '../models/users.model.js';
+import { resetPassword } from '../helpers/email.helper.js';
 
 // Vista para mostrar el formulario de registro
 const formRegister = (req, res) =>{
@@ -118,7 +119,15 @@ const recoverPassword = async (req, res, next) =>{
     
     // Crear url para enviar correo electrónico
     const resetUrl = `http://${req.headers.host}/recover-password/${user.token}`;
-    console.log(resetUrl);
+    
+    // Enviar correo electrónico
+    await resetPassword({
+       email: user.email,
+       name: user.name,
+       resetUrl,
+       archive
+    });
+
     // Redireccionar al usuario
     req.flash('correcto', 'Revisa tu email para las instrucciones de reestablecer tu contraseña')
     res.redirect('/auth/login');
