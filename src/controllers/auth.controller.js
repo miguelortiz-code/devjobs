@@ -1,5 +1,6 @@
 import { check, validationResult } from 'express-validator';
 import passport from 'passport';
+import crypto from 'crypto';
 import Users from '../models/users.model.js';
 
 // Vista para mostrar el formulario de registro
@@ -80,11 +81,55 @@ const formRecoverPassword = (req, res) =>{
         tagline: 'Si ya tienes una cuenta pero olvidaste tu password, coloca tu email'
     });
 }
+
+const recoverPassword = async (req, res, next) =>{
+    // Extraer datos del input
+    const {email} = req.body;
+    
+    // Validar y sanitizar los campos
+    await check('email').notEmpty().withMessage('El correo es obligatorio').isEmail().withMessage('El formato del correo es inválido').normalizeEmail().run(req);
+    let result = validationResult(req);
+    
+    // Validar si el resultado está vacio
+    if(!result.isEmpty()){
+        //Errors
+        req.flash('error', result.array().map(res => res.msg));
+        return res.render('auth/recover-password', {
+            namePage: 'Recuperar Contraseña',
+            tagline: 'Si ya tienes una cuenta pero olvidaste tu password, coloca tu email',
+            message: req.flash()
+        });
+    }
+
+    // Consultar al usuario mediante el correo electrónico
+    const user = await Users.findOne({email});
+    // Si no existe el usuario
+    if(!user){
+        req.flash('error', 'El correo ingresado no se encuentra registrado');
+        return res.redirect('/auth/recover-password')
+    }
+
+    // Si existe el usuario, se genera el token
+    user.token = crypto.randomBytes(20).toString('hex');
+    user.expire = Date.now() + 3600000;
+
+    // Guadar el usuario
+    await user.save();
+    
+    // Crear url para enviar correo electrónico
+    const resetUrl = `http://${req.headers.host}/recover-password/${user.token}`;
+    console.log(resetUrl);
+    // Redireccionar al usuario
+    req.flash('correcto', 'Revisa tu email para las instrucciones de reestablecer tu contraseña')
+    res.redirect('/auth/login');
+
+};
 export{
     formRegister,
     register,
     formLogin,
     formRecoverPassword,
     login,
-    logout
+    logout,
+    recoverPassword
 }
