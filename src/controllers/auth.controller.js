@@ -162,6 +162,67 @@ const checkToken = async (req, res) => {
 };
 
 
+// Almacenar nueva contraseña
+const newPassword = async (req, res) => {
+    try {
+        const { token } = req.params;
+        const { password, confirm_password } = req.body;
+
+        // Validaciones
+        await check('password')
+            .notEmpty().withMessage('La contraseña es obligatoria')
+            .isLength({ min: 6 }).withMessage('La contraseña debe tener mínimo 6 caracteres')
+            .trim()
+            .run(req);
+
+        await check('confirm_password')
+            .notEmpty().withMessage('La confirmación de la contraseña es obligatoria')
+            .custom((val, { req }) => {
+                if (val !== req.body.password) {
+                    throw new Error('Las contraseñas no coinciden');
+                }
+                return true;
+            })
+            .trim()
+            .run(req);
+
+        let result = validationResult(req);
+
+        if (!result.isEmpty()) {
+            req.flash('error', result.array().map(err => err.msg));
+            return res.render('auth/new-password', {
+                namePage: 'Restablecer contraseña',
+                messages: req.flash(),
+                token
+            });
+        }
+
+        // Buscar usuario con el token válido
+        const user = await Users.findOne({
+            token,
+            expire: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            req.flash('error', 'El token ha expirado o no es válido');
+            return res.redirect('/auth/recover-password');
+        }
+
+        // Asignar nueva contraseña y limpiar datos
+        user.password = password;
+        user.token = null;
+        user.expire = null;
+        await user.save();
+
+        req.flash('correcto', 'Contraseña modificada correctamente');
+        return res.redirect('/auth/login');
+
+    } catch (error) {
+        console.error(`Error verificando token: ${error}`);
+        req.flash('error', 'Hubo un problema verificando el token');
+        res.redirect('/auth/recover-password');
+    }
+};
 export{
     formRegister,
     register,
@@ -170,5 +231,6 @@ export{
     login,
     logout,
     recoverPassword,
-    checkToken
+    checkToken,
+    newPassword
 }
