@@ -66,6 +66,7 @@ const login = (req, res, next) => {
         badRequestMessage: 'Los campos son obligatorios'
     })(req, res, next);
 };
+
 const logout = (req, res, next) =>{
     req.logout(function(err){
         if(err){
@@ -118,7 +119,7 @@ const recoverPassword = async (req, res, next) =>{
     await user.save();
     
     // Crear url para enviar correo electrónico
-    const resetUrl = `http://${req.headers.host}/recover-password/${user.token}`;
+    const resetUrl = `http://${req.headers.host}/auth/recover-password/${user.token}`;
     
     // Enviar correo electrónico
     await resetPassword({
@@ -131,8 +132,36 @@ const recoverPassword = async (req, res, next) =>{
     // Redireccionar al usuario
     req.flash('correcto', 'Revisa tu email para las instrucciones de reestablecer tu contraseña')
     res.redirect('/auth/login');
-
 };
+
+const checkToken = async (req, res) => {
+    try {
+        // Extraer el token de la url
+        const { token } = req.params;
+        // Consultar la usuario mediante el token 
+        const user = await Users.findOne({
+            token,
+            expire: { $gt: Date.now() }
+        });
+
+        // Si el token expiró
+        if (!user) {
+            req.flash('error', 'El token ha expirado, solicita uno nuevo');
+            return res.redirect('/auth/recover-password');
+        }
+        // Si el token es valido, mostrar el formulario para cambiar de contraseña
+        res.render('auth/new-password', {
+            namePage: 'Restablecer contraseña',
+            token
+        });
+    } catch (error) {
+        console.error(`Error verificando token: ${error}`);
+        req.flash('error', 'Hubo un problema verificando el token');
+        res.redirect('/auth/recover-password');
+    }
+};
+
+
 export{
     formRegister,
     register,
@@ -140,5 +169,6 @@ export{
     formRecoverPassword,
     login,
     logout,
-    recoverPassword
+    recoverPassword,
+    checkToken
 }
