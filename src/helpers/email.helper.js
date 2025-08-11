@@ -13,9 +13,19 @@ const resetPassword = async (data) =>{
         }
     });
 
+    // Configuración de handlebars para nodemailer
+    transport.use('compile', hbs({
+        viewEngine: {
+            extname: '.handlebars',
+            layoutsDir: path.resolve('./src/views/emails'), // Carpeta donde están tus plantillas
+            defaultLayout: false
+        },
+        viewPath: path.resolve('./src/views/emails'), // Carpeta donde están tus plantillas
+        extName: '.handlebars'
+    }));
+
     // Extraer la información del controlador
     const {name, email, resetUrl, archive} = data;
-    
     
     // Enviar Email
     try {
@@ -25,6 +35,7 @@ const resetPassword = async (data) =>{
             subject: "Restablece tu contraseña en devJobs",
             template: archive,
             context: {
+                name,
                 resetUrl
             }
 

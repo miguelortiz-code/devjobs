@@ -125,7 +125,7 @@ const recoverPassword = async (req, res, next) =>{
        email: user.email,
        name: user.name,
        resetUrl,
-       archive
+       archive: 'reset'
     });
 
     // Redireccionar al usuario

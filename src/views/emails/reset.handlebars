@@ -1,0 +1,35 @@
+<h1 style="text-align:center; 
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333;
+">Reestablecer Password</h1>
+
+<p style="font-family: Arial, Helvetica, sans-serif; color: #555;">
+    Hola, {{name}}, has solicitado reestablecer tu password.
+    Haz click en el siguiente enlace. Este enlace es temporal, si se vence es necesario que vuelvas a solicitar otro e-mail.
+</p>
+
+<a href="{{resetUrl}}"
+    style="
+        display:inline-block;
+        font-family: Arial, Helvetica, sans-serif;
+        padding: 12px 20px;
+        background-color: #00C897;
+        color: #ffffff;
+        text-transform: uppercase;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: bold;
+        margin: 20px auto;
+    ">
+    🔑 Resetear Password
+</a>
+
+<p style="font-family: Arial, Helvetica, sans-serif; color: #555;">
+    Si no puedes acceder a este enlace, visita:<br>
+    <a href="{{resetUrl}}" style="color: #00C897;">{{resetUrl}}</a>
+</p>
+
+<p style="font-family: Arial, Helvetica, sans-serif; color: #777;">
+    Si no solicitaste este e-mail, puedes ignorarlo.
+</p>
