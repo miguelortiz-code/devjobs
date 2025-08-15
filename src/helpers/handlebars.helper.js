@@ -30,14 +30,16 @@ const showAlerts = (alerts = {}) => {
     let html = '';
 
     // Recorrer cada tipo de alerta: error, success, etc.
-    Object.keys(alerts).forEach(category => {
-        alerts[category].forEach(msg => {
-            html += `
-                <div class="${category} alerta">
-                    ${msg}
-                </div>
-            `;
-        });
+     Object.keys(alerts).forEach(category => {
+        if (Array.isArray(alerts[category])) {
+            alerts[category].forEach(msg => {
+                html += `
+                    <div class="${category} alerta">
+                        ${msg}
+                    </div>
+                `;
+            });
+        }
     });
     return new Handlebars.SafeString(html);
 };

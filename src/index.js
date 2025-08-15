@@ -7,6 +7,7 @@ import session from 'express-session';
 import {engine} from 'express-handlebars';
 import {allowInsecurePrototypeAccess} from '@handlebars/allow-prototype-access';
 import handlebars from 'handlebars';
+import createHttpError from 'http-errors';
 import {homeRoutes, authRoutes, dashboardRoutes, profileRoutes} from './routes/index.routes.js'
 import { selectSkills, showAlerts } from './helpers/handlebars.helper.js';
 import { message } from './middleware/message.middleware.js';
@@ -64,8 +65,18 @@ app.use('/', homeRoutes); // Página principal
 app.use('/auth', authRoutes) // Autenticación
 app.use('/', dashboardRoutes) // Panel administrativo
 app.use('/account', profileRoutes) // Perfil del usuario
+// 404 Página no existe
+app.use((req, res, next) =>{
+  next(createHttpError(404, 'Página no encontrada'))
+});
 
-
+// Administración de los errores
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).render('error', {
+    status: err.status || 500,
+    message: err.message || 'Ocurrió un error en el servidor'
+  });
+});
 
 
 // Arrancando servidor
