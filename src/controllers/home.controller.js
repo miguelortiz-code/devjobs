@@ -315,6 +315,25 @@ const uploadResume = async (req, res, next) => {
   }
 };
 
+// Buscador de vancantes
+const search = async (req, res) =>{
+  const {search} = req.body;
+  const vacancies = await Vacancy.find({
+    $text:{
+      $search: search
+    }
+  });
+
+ // Mostrar el filtro de vacantes
+  res.render("home", {
+    namePage: `Resultados de la búsqueda - ${search}`,
+    tagline: "Encuentra y Pública Trabajos para Desarrolladores Web",
+    navbar: true,
+    button: true,
+    vacancies,
+  });
+}
+
 export {
   displayJobs,
   formVacancie,
@@ -324,4 +343,5 @@ export {
   editVacancy,
   deleteVacancy,
   uploadResume,
+  search
 };

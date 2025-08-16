@@ -1,5 +1,5 @@
 import express from 'express';
-import {displayJobs, formVacancie, addVacancy, showVacancy, formEditVacancy, editVacancy, deleteVacancy, uploadResume} from '../controllers/home.controller.js';
+import {displayJobs, formVacancie, addVacancy, showVacancy, formEditVacancy, editVacancy, deleteVacancy, uploadResume, search} from '../controllers/home.controller.js';
 import {isAuthenticated, noCache,multerErrorHandler, uploadCv} from '../middleware/index.middleware.js';
 const router = express.Router();
 
@@ -13,6 +13,7 @@ router.delete('/vacancy/delete/:id', isAuthenticated, noCache, deleteVacancy); /
 router.post('/vacancies/new', isAuthenticated, noCache, addVacancy) // Agregar nueva vacante
 router.post('/vacancies/edit/:url', isAuthenticated, noCache, editVacancy) // Editar vacante
 router.post('/vacancy/:url', noCache, uploadCv.single('cv'), multerErrorHandler, uploadResume); // agregar candidato con PDF
+router.post('/search', noCache, search);
 
 
 export default router

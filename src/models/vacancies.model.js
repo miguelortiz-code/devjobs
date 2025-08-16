@@ -51,6 +51,13 @@ const vacancySchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
+// Crear un índice de texto
+vacancySchema.index({
+  title: 'text',
+  company: 'text',
+  skills: 'text'
+});
+
 // Generar slug antes de guardar
 vacancySchema.pre('save', function(next) {
   const url = slug(this.title);
