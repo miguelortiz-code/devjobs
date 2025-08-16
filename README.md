@@ -54,11 +54,11 @@ La aplicación permite a los usuarios **publicar vacantes de empleo**, visualiza
 
 Puedes iniciar sesión con estos usuarios predefinidos:  
 
-- 📧 **reclutador@gmail.com**  
-  🔑 **DevJobs123**  
+- 📧 **prueba@gmail.com**  
+  🔑 **Prueba123**  
 
-- 📧 **candidato@gmail.com**  
-  🔑 **DevJobs123**  
+- 📧 **prueba1@gmail.com**  
+  🔑 **Prueba**  
 
 > *Credenciales solo para fines de prueba*  
 
@@ -66,79 +66,99 @@ Puedes iniciar sesión con estos usuarios predefinidos:
 
 ## 📦 Instalación local
 
-1. Clona el repositorio:  
+1. Clona el repositorio:
 
    ```bash
    git clone https://github.com/tu-usuario/devjobs.git
    cd devjobs
 Instala dependencias:
 
-bash
-Copiar
-Editar
-npm install
-Crea un archivo .env con tus configuraciones:
+2. npm install
 
-env
-Copiar
-Editar
-DB_URI=mongodb://localhost:27017/devjobs
-SESSION_SECRET=un_secreto_seguro
-EMAIL_HOST=smtp.tucorreo.com
-EMAIL_PORT=587
-EMAIL_USER=correo@tucorreo.com
-EMAIL_PASS=contraseña
-Inicia el servidor en desarrollo:
+3. Crea un archivo .env
+   - DB_URI=mongodb://localhost:27017/devjobs
+   - SESSION_SECRET=un_secreto_seguro
+   - EMAIL_HOST=smtp.tucorreo.com
+   - EMAIL_PORT=587
+   - EMAIL_USER=correo@tucorreo.com
+   - EMAIL_PASS=contraseña
 
-bash
-Copiar
-Editar
-npm run dev
-Accede a la app en:
-👉 http://localhost:3000
+4. Ejecuta los seeders para generar datos de prueba (usuarios, propiedades, categorías, etc.)
 
-🖼️ Capturas de pantalla
-Página principal
+5. Inicia el servidor: npm run dev
 
-Detalle de vacante
+6. Visita la app en: http://localhost:4000
 
-Panel de administración
+## 👤 Autor
+Desarrollado por Miguel Ortiz.
+
+## 🖼️ Capturas de pantalla
 
 
-Perfil de usuario
+### Página principal
+![Homepage](src/docs/hero.png)
 
-🔌 Endpoints principales
-🔐 Autenticación (/auth)
-Método	Ruta	Descripción
-GET	/auth/login	Formulario de inicio de sesión
-POST	/auth/login	Procesa inicio de sesión
-GET	/auth/register	Formulario de registro
-POST	/auth/register	Procesa registro de usuario
-GET	/auth/logout	Cierra sesión y limpia caché
-GET	/auth/reset-password	Formulario para restablecer contraseña
-POST	/auth/reset-password	Envía correo con token de recuperación
-GET	/auth/reset/:token	Verifica token de recuperación
-POST	/auth/reset/:token	Almacena nueva contraseña
+### Detalle de vacante
+![Section Home and Apartament](docs/section-home.png)
 
-💼 Vacantes (/vacancies)
-Método	Ruta	Descripción
-GET	/vacancies	Lista todas las vacantes
-POST	/vacancies	Crear nueva vacante
-GET	/vacancies/:id	Ver detalle de vacante
-PUT	/vacancies/:id	Editar vacante
-DELETE	/vacancies/:id	Eliminar vacante
-POST	/vacancies/:id/apply	Postular candidato a una vacante
-GET	/vacancies/:id/candidates	Ver candidatos de una vacante (reclutador)
+### Panel de administración
+![Property View](docs/property.png)
 
-👤 Usuarios (/users)
-Método	Ruta	Descripción
-GET	/users/profile	Ver perfil del usuario
-PUT	/users/profile	Editar perfil con validaciones
-POST	/users/upload	Subir imagen o CV del usuario
+### Perfil de usuario
+![Property View](docs/admin.png)
 
-🔎 Búsqueda (/search)
-Método	Ruta	Descripción
-GET	/search?q=texto	Buscar vacantes por palabra clave
+### Panel de administración
+![Property View](docs/admin.png)
 
-👤 Autor
-Desarrollado por Miguel.
+
+
+
+## 🔌 Endpoints de la API – DevJobs
+
+### 🔐 Autenticación (`/auth`)
+
+| Método | Ruta                      | Descripción                                             |
+|--------|---------------------------|---------------------------------------------------------|
+| GET    | /register                 | Muestra el formulario de registro                      |
+| POST   | /register                 | Registra un nuevo usuario                              |
+| GET    | /login                    | Muestra el formulario de inicio de sesión              |
+| POST   | /login                    | Procesa el inicio de sesión                            |
+| GET    | /logout                   | Cierra la sesión del usuario                           |
+| GET    | /recover-password         | Muestra formulario para solicitar restablecer password |
+| POST   | /recover-password         | Envía email para restablecer contraseña                |
+| GET    | /recover-password/:token  | Verifica token de recuperación                         |
+| POST   | /recover-password/:token  | Establece la nueva contraseña                          |
+
+---
+
+### 🖥️ Dashboard (`/admin`)
+
+| Método | Ruta            | Descripción                           |
+|--------|-----------------|---------------------------------------|
+| GET    | /admin          | Vista principal del panel admin       |
+| GET    | /candidates/:id | Lista los candidatos de una vacante   |
+
+---
+
+### 🏠 Vacantes (`/vacancies` y `/vacancy`)
+
+| Método | Ruta                 | Descripción                                |
+|--------|----------------------|--------------------------------------------|
+| GET    | /                    | Muestra todas las vacantes publicadas      |
+| GET    | /vacancies/new       | Formulario para crear una nueva vacante    |
+| POST   | /vacancies/new       | Agrega nueva vacante a la base de datos    |
+| GET    | /vacancy/:url        | Muestra la información pública de vacante  |
+| POST   | /vacancy/:url        | Permite a candidatos enviar su CV en PDF   |
+| GET    | /vacancy/edit/:url   | Formulario para editar una vacante         |
+| POST   | /vacancies/edit/:url | Actualiza información de la vacante        |
+| DELETE | /vacancy/delete/:id  | Elimina una vacante existente              |
+| POST   | /search              | Buscador de vacantes                       |
+
+---
+
+### 👤 Perfil (`/profile`)
+
+| Método | Ruta      | Descripción                              |
+|--------|-----------|------------------------------------------|
+| GET    | /profile  | Muestra el perfil del usuario            |
+| POST   | /profile  | Actualiza el perfil con imagen de usuario |
