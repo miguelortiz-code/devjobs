@@ -99,7 +99,7 @@ Desarrollado por Miguel Ortiz.
 ![Homepage](src/docs/hero.png)
 
 ### Detalle de vacante
-![Section Home and Apartament](docs/section-home.png)
+![Section details vacancy](docs/section-home.png)
 
 ### Panel de administración
 ![Property View](docs/property.png)

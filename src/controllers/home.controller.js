@@ -139,34 +139,46 @@ const showVacancy = async (req, res, next) => {
 
 // Función para mostrar la vista del formulario de edición de la vacante
 const formEditVacancy = async (req, res, next) => {
-  // Extraer la url de la vacante desde la url
-  const { url } = req.params;
-  const { name, image } = req.user;
-  // Consultar vacante desde la base de datos
-  const vacancy = await Vacancy.findOne({ url: url });
+  
+  try {
+    const vacancy = req.vacancy;
+    // console.log(vacancy);
+  } catch (error) {
+    console.log(error);
+    res.status(500).render('error', {
 
-  // Si no existe Vacante
-  if (!vacancy) return next();
-
-  // Validar que los skills sean un array
-  let selectedSkills = [];
-  if (typeof vacancy.skills === "string") {
-    selectedSkills = vacancy.skills.split(",").map((skill) => skill.trim());
-  } else if (Array.isArray(vacancy.skills)) {
-    selectedSkills = vacancy.skills;
+    });
   }
+  
+  
+  // Extraer la url de la vacante desde la url
+  // const { url } = req.params;
+  
+  // const {_id, name, image } = req.user;
+  // // Consultar vacante desde la base de datos
+  // const vacancy = await Vacancy.findOne({ url: url });
 
-  // Si Existe la vacante renderizar el formulario
-  res.render("vacancies/edit-vacancy", {
-    namePage: `Editar - ${vacancy.title}`,
-    vacancy,
-    typeContract,
-    skills: selectedSkills,
-    logout: true,
-    name,
-    image,
-    message: req.flash(),
-  });
+  // // Si no existe Vacante
+  // if (!vacancy) return next();
+
+  // // Validar que los skills sean un array
+  // let selectedSkills = [];
+  // if (typeof vacancy.skills === "string") {
+  //   selectedSkills = vacancy.skills.split(",").map((skill) => skill.trim());
+  // } else if (Array.isArray(vacancy.skills)) {
+  //   selectedSkills = vacancy.skills;
+  // }
+  // // Si Existe la vacante renderizar el formulario
+  // res.render("vacancies/edit-vacancy", {
+  //   namePage: `Editar - ${vacancy.title}`,
+  //   vacancy,
+  //   typeContract,
+  //   skills: selectedSkills,
+  //   logout: true,
+  //   name,
+  //   image,
+  //   message: req.flash(),
+  // });
 };
 
 // Función para editar vacantes
