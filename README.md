@@ -102,13 +102,13 @@ Desarrollado por Miguel Ortiz.
 ![Section details vacancy](docs/section-home.png)
 
 ### Panel de administración
-![Property View](docs/property.png)
+![Administrative Panel](docs/administrative-panel.png)
 
 ### Perfil de usuario
-![Property View](docs/admin.png)
+![User Profile](docs/user.png)
 
-### Panel de administración
-![Property View](docs/admin.png)
+### Detalle del candidato
+![Details Candidate](docs/vacancy.png)
 
 
 
