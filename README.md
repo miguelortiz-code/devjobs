@@ -102,7 +102,7 @@ Desarrollado por Miguel Ortiz.
 ![Section details vacancy](docs/section-home.png)
 
 ### Panel de administración
-![Administrative Panel](docs/administrative-panel.png)
+![Administrative Panel](src/docs/administrative-panel.png)
 
 ### Perfil de usuario
 ![User Profile](docs/user.png)
