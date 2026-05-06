@@ -99,7 +99,7 @@ Desarrollado por Miguel Ortiz.
 ![Homepage](src/docs/hero.png)
 
 ### Detalle de vacante
-![Section details vacancy](src/docs/hero.png)
+![Section details vacancy](src/docs/vacancy.png)
 
 ### Panel de administración
 ![Administrative Panel](src/docs/administrative-panel.png)
