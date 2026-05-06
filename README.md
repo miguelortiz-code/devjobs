@@ -96,19 +96,19 @@ Desarrollado por Miguel Ortiz.
 
 
 ### Página principal
-![Homepage](src/docs/hero.png)
+![Homepage](/src/docs/hero.png)
 
 ### Detalle de vacante
-![Section details vacancy](src/docs/vacancy.png)
+![Section details vacancy](/src/docs/vacancy.png)
 
 ### Panel de administración
-![Administrative Panel](src/docs/administrative-panel.png)
+![Administrative Panel](/src/docs/administrative-panel.png)
 
 ### Perfil de usuario
-![User Profile](src/docs/user.png)
+![User Profile](/src/docs/user.png)
 
 ### Detalle del candidato
-![Details Candidate](src/docs/candidates.png)
+![Details Candidate](/src/docs/candidates.png)
 
 
 
